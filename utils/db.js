@@ -14,12 +14,15 @@ const DBClient = class {
     })();
   }
 
-  //isAlive() { return Boolean(this.db); } // this.client.isConnected(); [Deprecated]
+  isAlive() { return Boolean(this.db); } // this.client.isConnected(); [Deprecated]
 
-  /*async nbUsers() {
-    const nbUsers = await this.db.collection('users').countDocuments();
-    return nbUsers;
-  }*/
+  async nbUsers() {
+    return await this.db.collection('users').countDocuments();
+  }
+
+  async nbJobs() {
+    return await this.db.collection('jobs').countDocuments();
+  }
 };
 
 const dbClient = new DBClient();
