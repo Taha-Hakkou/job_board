@@ -13,8 +13,8 @@ const routesLoader = (app) => {
   // app.get('/logout', AuthController.getDisconnect); // or delete()
 
   app.post('/jobs', JobsController.postJob);
-  // app.get('/jobs', JobsController.getJobs);
-  // app.get('/jobs/:id', JobsController.getJob);
+  app.get('/jobs', JobsController.getJobs);
+  app.get('/jobs/:id', JobsController.getJob);
 };
 
 export default routesLoader;

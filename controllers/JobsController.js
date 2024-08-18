@@ -29,18 +29,18 @@ const JobsController = class {
     return res.status(400).json(job);
   }
 
-  /*static async getJobs(req, res) {
-    const jobs = dbClient.db.collection('jobs').find(); // filters + pagination
-    return res.status(200).json(jobs);
+  static async getJobs(req, res) {
+    const jobs = await dbClient.db.collection('jobs').find().toArray(); // filters + pagination
+    return res.json(jobs);
   }
 
   static async getJob(req, res) {
-    const job = dbClient.db.collection('jobs').findOne({
+    const job = await dbClient.db.collection('jobs').findOne({
       _id: ObjectId(req.params.id),
     });
     if (job === null) return res.status(404).json({ error: 'Not found' });
     return res.status(200).json(job);
-  }*/
+  }
 };
 
 export default JobsController;
