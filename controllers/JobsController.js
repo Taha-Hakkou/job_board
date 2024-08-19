@@ -30,6 +30,7 @@ const JobsController = class {
   }
 
   static async getJobs(req, res) {
+    const { user } = req;
     const jobs = await dbClient.db.collection('jobs').find().toArray(); // filters + pagination
     return res.json(jobs);
   }
