@@ -41,6 +41,7 @@ const JobsController = class {
       _id: ObjectId(req.params.id),
     });
     if (job === null) return res.status(404).json({ error: 'Not found' });
+    // numberOfApplicants
     return res.status(200).json(job);
   }
 
