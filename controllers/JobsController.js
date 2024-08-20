@@ -24,6 +24,7 @@ const JobsController = class {
       experience,
       salary: salary ? Number(salary) : 'negotiable',
       description: description ? description : 'No description',
+      applicants: [],
     };
     await dbClient.db.collection('jobs').insertOne(job);
     return res.status(400).json(job);
@@ -41,6 +42,22 @@ const JobsController = class {
     });
     if (job === null) return res.status(404).json({ error: 'Not found' });
     return res.status(200).json(job);
+  }
+
+  static async applyJob(req, res) {
+    const job = await dbClient.db.collection('jobs').findOne({
+      _id: ObjectId(req.params.id),
+    });
+    if (job === null) return res.status(404).json({ error: 'Not found' });
+    if (job.applicants.map(obj => obj.toString()).includes(req.user._id)) {
+      // doesn't work without map
+      return res.status(400).json({ error: 'Already applied' });
+    }
+    await dbClient.db.collection('jobs').findOneAndUpdate(
+      { _id: ObjectId(req.params.id) },
+      { $push: { applicants: ObjectId(req.user._id) } },
+    );
+    return res.json({ message: 'Successfully applied' });
   }
 };
 

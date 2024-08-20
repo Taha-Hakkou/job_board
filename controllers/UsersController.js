@@ -19,6 +19,13 @@ const UsersController = class {
       email,
     });
   }
+
+  static getMe(req, res) {
+    return res.json({
+      id: req.user._id,
+      email: req.user.email,
+    });
+  }
 };
 
 export default UsersController;

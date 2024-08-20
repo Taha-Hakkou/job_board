@@ -12,10 +12,13 @@ const routesLoader = (app) => {
   app.post('/register', UsersController.postUser);
   app.get('/login', AuthController.getConnect);
   // app.get('/logout', jwtAuthCookie, AuthController.getDisconnect); // or delete()
+  app.get('/me', jwtAuthCookie, UsersController.getMe);
 
-  app.post('/jobs', jwtAuthCookie, JobsController.postJob);
   app.get('/jobs', JobsController.getJobs);
   app.get('/jobs/:id', JobsController.getJob);
+
+  app.post('/jobs', jwtAuthCookie, JobsController.postJob);
+  app.post('/jobs/:id', jwtAuthCookie, JobsController.applyJob);
 };
 
 export default routesLoader;
