@@ -2,11 +2,12 @@
 import { ObjectId } from 'mongodb';
 import dbClient from '../utils/db';
 
+const validTypes = ['on-site', 'hybrid', 'remote'];
+const validExperiences = ['internship', 'entry-level', 'associate', 'mid-senior', 'director', 'executive'];
+
 const JobsController = class {
   static async postJob(req, res) {
     const {title, company, type, place, experience, salary, description} = req.body;
-    const validTypes = ['on-site', 'hybrid', 'remote'];
-    const validExperiences = ['internship', 'entry-level', 'associate', 'mid-senior', 'director', 'executive'];
     if (!title) return res.status(400).json({ error: 'Missing title' });
     if (!company) return res.status(400).json({ error: 'Missing company' });
     if (!type || !validTypes.includes(type)) {
@@ -31,11 +32,31 @@ const JobsController = class {
   }
 
   static async getJobs(req, res) {
-    const { user } = req;
-    let { page } = req.query;
+    //const { user } = req;
+    let { page, company, types, place, experiences, salary, margin } = req.query;
     page = page ? Number(page) : 0;
+    const filters = {};
+    if (company) filters.company = company;
+    if (place) filters.place = place;
+    if (types) {
+      types = types.split(',');
+      types = types.filter(type => validTypes.includes(type));
+      filters.type = { '$in': types };
+    }
+    if (experiences) {
+      experiences = experiences.split(',');
+      experiences = experiences.filter(experience => validExperiences.includes(experience));
+      filters.experience = { '$in': experiences };
+    }
+    if (salary) {
+      margin = margin ? Number(margin): 100;
+      filters.salary = {
+        '$gte': Number(salary) - margin,
+	'$lte': Number(salary) + margin,
+      };
+    }
     const jobs = await dbClient.db.collection('jobs').aggregate([
-      { $match: {} },
+      { $match: filters },
       { $skip: page * 20 },
       { $limit: 20 },
     ]).toArray(); // filters
