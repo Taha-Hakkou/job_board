@@ -11,7 +11,7 @@ const routesLoader = (app) => {
 
   app.post('/register', UsersController.postUser);
   app.get('/login', AuthController.getConnect);
-  // app.get('/logout', jwtAuthCookie, AuthController.getDisconnect); // or delete()
+  app.get('/logout', jwtAuthCookie, AuthController.getDisconnect);
   app.get('/me', jwtAuthCookie, UsersController.getMe);
 
   app.get('/jobs', JobsController.getJobs);

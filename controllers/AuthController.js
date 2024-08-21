@@ -13,26 +13,27 @@ const AuthController = class {
       password: sha1(password),
     });
     if (user === null) return res.status(401).json({ error: 'Unauthorized' });
-    /*const token = uuidv4();
-    const key = `auth_${token}`;
-    redisClient.set(key, user._id.toString(), 24 * 60 * 60 * 1000);*/
-    const token = jwt.sign(user, 'secret', { expiresIn: 60 });
+    const token = jwt.sign(user, 'secret', { expiresIn: '1h' });
     res.cookie('token', token, {
       httpOnly: true,
     });
     return res.status(200).json({ token });
   }
 
-  /*static async getDisconnect(req, res) {
-    const userId = await redisClient.get(`auth_${req.headers['x-token']}`);
-    const user = await dbClient.db.collection('users').findOne({ _id: ObjectId(userId) });
-    if (user === null) {
-      res.status(401).json({ error: 'Unauthorized' });
-    } else {
-      redisClient.del(`auth_${req.headers['x-token']}`);
-      res.status(204).send();
+  static async getDisconnect(req, res) {
+    let doc = await dbClient.db.collection('utils').findOne({
+      name: 'blackListedTokens'
+    });
+    if (doc === null) {
+      doc = { name: 'blackListedTokens', tokens: [] };
+      await dbClient.db.collection('utils').insertOne(doc);
     }
-  }*/
+    await dbClient.db.collection('utils').findOneAndUpdate(
+      { _id: doc._id },
+      { $push: { tokens: sha1(req.cookies.token) } },
+    );
+    return res.json({ message: 'Signed out successfully' });
+  }
 };
 
 export default AuthController;
