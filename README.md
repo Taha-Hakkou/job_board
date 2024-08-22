@@ -53,7 +53,8 @@ curl localhost:5000/stats ; echo ""
 # without filters
 curl localhost:5000/jobs?page=PAGE ; echo ""
 # with filters
-curl 'localhost:5000/jobs?company=COMPANY&place=PLACE&types=TYPE1,TYPE2,...&experiences=EXP1,EXP2,...&salary=SALARY&margin=MARGIN' ; echo ""
+# curl 'localhost:5000/jobs?company=COMPANY&place=PLACE&types=TYPE1,TYPE2,...&experiences=EXP1,EXP2,...&salary=SALARY&margin=MARGIN' ; echo ""
+curl 'localhost:5000/jobs?company=sqli&place=oujda&salary=8000&margin=300' ; echo ""
 ```
 
 > {"numberOfResults": N, page: P, [...results]}
@@ -101,7 +102,7 @@ curl localhost:5000/me --cookie 'token=TOKEN' ; echo ""
 curl localhost:5000/jobs -XPOST -H "Content-Type: application/json" -d '{ "title": "Back-end Developer", "company": "sqli", "type": "on-site", "place": "oujda", "experience": "internship", "salary": "500", "description": "python, c#" }' ; echo ""
 ```
 
-> {"id":"66c26ec9fe8051b83cd70b91","title":"backend se","company":"sqli","type":"on-site","place":"oujda","experience":"internship","salary":500,"description":"python, c#","_id":"66c26ec9fe8051b83cd70b91"}
+> {"id":"66c26ec9fe8051b83cd70b91","title":"Back-end Developer","company":"sqli","type":"on-site","place":"oujda","experience":"internship","salary":500,"description":"python, c#","_id":"66c26ec9fe8051b83cd70b91"}
 
 **Applying to jobs :**
 
