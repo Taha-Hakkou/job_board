@@ -8,10 +8,8 @@ const DBClient = class {
     const DB = process.env.DB_DATABASE || 'job_board';
     const uri = `mongodb://${HOST}:${PORT}`;
     this.client = new MongoClient(uri, { useUnifiedTopology: true });
-    (async () => {
-      await this.client.connect();
-      this.db = await this.client.db(DB);
-    })();
+    this.client.connect();
+    this.db = this.client.db(DB);
   }
 
   isAlive() { return Boolean(this.db); } // this.client.isConnected(); [Deprecated]

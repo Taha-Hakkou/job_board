@@ -34,7 +34,7 @@ const JobsController = class {
   static async getJobs(req, res) {
     //const { user } = req;
     let { page, company, types, place, experiences, salary, margin } = req.query;
-    page = page ? Number(page) : 0;
+    page = page ? Number(page) : 1;
     const filters = {};
     if (company) filters.company = company;
     if (place) filters.place = place;
@@ -57,10 +57,14 @@ const JobsController = class {
     }
     const jobs = await dbClient.db.collection('jobs').aggregate([
       { $match: filters },
-      { $skip: page * 20 },
+      { $skip: (page - 1) * 20 },
       { $limit: 20 },
-    ]).toArray(); // filters
-    return res.json(jobs);
+    ]).toArray();
+    return res.json({
+      numberOfResults: await dbClient.db.collection('jobs').countDocuments(filters),
+      page,
+      jobs
+    });
   }
 
   static async getJob(req, res) {

@@ -45,17 +45,18 @@ curl localhost:5000/status ; echo ""
 curl localhost:5000/stats ; echo ""
 ```
 
-> {"users":1,"jobs":2}
+> {"users":1,"jobs":100}
 
 **Jobs Listing**
 
 ```bash
 # without filters
-curl localhost:5000/jobs ; echo ""
+curl localhost:5000/jobs?page=PAGE ; echo ""
 # with filters
+curl 'localhost:5000/jobs?company=COMPANY&place=PLACE&types=TYPE1,TYPE2,...&experiences=EXP1,EXP2,...&salary=SALARY&margin=MARGIN' ; echo ""
 ```
 
-> [{"_id":"66c26ec9fe8051b83cd70b91","title":"backend se","company":"sqli","type":"on-site","place":"oujda","experience":"internship","salary":500,"description":"python, c#","applicants":[]},{"_id":"66c270dfc8f594c442ace300","title":"backend se","company":"sqli","type":"on-site","place":"oujda","experience":"internship","salary":500,"description":"python, c#","applicants":[]}]
+> {"numberOfResults": N, page: P, [...results]}
 
 **Job Details**
 
@@ -81,10 +82,10 @@ curl localhost:5000/login -H "Authorization: Basic Ym9iQGR5bGFuLmNvbTp0b3RvMTIzN
 > {"token":"TOKEN"}
 
 ```bash
-#curl localhost:5000/logout -H "X-Token: 031bffac-3edc-4e51-aaae-1c121317da8a" ; echo ""
+curl localhost:5000/logout --cookie 'token=TOKEN' ; echo ""
 ```
 
->
+> {"message": "Signed out successfully"}
 
 **Profile**
 
@@ -97,7 +98,7 @@ curl localhost:5000/me --cookie 'token=TOKEN' ; echo ""
 **Posting jobs :**
 
 ```bash
-curl localhost:5000/jobs -XPOST -H "Content-Type: application/json" -d '{ "title": "backend se", "company": "sqli", "type": "on-site", "place": "oujda", "experience": "internship", "salary": "500", "description": "python, c#" }' ; echo ""
+curl localhost:5000/jobs -XPOST -H "Content-Type: application/json" -d '{ "title": "Back-end Developer", "company": "sqli", "type": "on-site", "place": "oujda", "experience": "internship", "salary": "500", "description": "python, c#" }' ; echo ""
 ```
 
 > {"id":"66c26ec9fe8051b83cd70b91","title":"backend se","company":"sqli","type":"on-site","place":"oujda","experience":"internship","salary":500,"description":"python, c#","_id":"66c26ec9fe8051b83cd70b91"}
